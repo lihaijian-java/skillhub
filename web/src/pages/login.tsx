@@ -7,6 +7,7 @@ import { LoginButton } from '@/features/auth/login-button'
 import { SessionBootstrapEntry } from '@/features/auth/session-bootstrap-entry'
 import { useAuthMethods } from '@/features/auth/use-auth-methods'
 import { usePasswordLogin } from '@/features/auth/use-password-login'
+import { WeComLoginEntry } from '@/features/auth/wecom-login-entry'
 import { Button } from '@/shared/ui/button'
 import { Input } from '@/shared/ui/input'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/shared/ui/tabs'
@@ -87,6 +88,7 @@ export function LoginPage() {
               methodDisplayName={bootstrapMethod?.displayName}
               onAuthenticated={() => navigate({ to: returnTo })}
             />
+            <WeComLoginEntry returnTo={returnTo} />
 
             <Tabs defaultValue="password" className="space-y-6">
               <TabsList className="grid w-full grid-cols-2">

@@ -166,9 +166,12 @@ const skillsRoute = createRoute({
 const loginRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: 'login',
-  validateSearch: (search: Record<string, unknown>): { returnTo: string; reason?: string } => ({
+  validateSearch: (search: Record<string, unknown>): { returnTo: string; reason?: string; code?: string; auth_code?: string; state?: string } => ({
     returnTo: typeof search.returnTo === 'string' ? search.returnTo : '',
     reason: typeof search.reason === 'string' ? search.reason : undefined,
+    code: typeof search.code === 'string' ? search.code : undefined,
+    auth_code: typeof search.auth_code === 'string' ? search.auth_code : undefined,
+    state: typeof search.state === 'string' ? search.state : undefined,
   }),
   component: LoginPage,
 })

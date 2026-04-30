@@ -46,6 +46,10 @@ vi.mock('@/features/auth/use-password-login', () => ({
   }),
 }))
 
+vi.mock('@/features/auth/wecom-login-entry', () => ({
+  WeComLoginEntry: () => null,
+}))
+
 vi.mock('@/shared/ui/button', () => ({
   Button: ({ children }: { children: unknown }) => children,
 }))

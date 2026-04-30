@@ -23,6 +23,17 @@ export interface AuthMethod {
   actionUrl: string
 }
 
+export interface WeComLoginConfig {
+  enabled: boolean
+  corpId: string
+  agentId: string
+  redirectUri: string
+}
+
+export interface WeComAuthorizeUrlResponse {
+  url: string
+}
+
 export type ApiToken = Omit<components['schemas']['TokenSummaryResponse'], 'id' | 'name' | 'tokenPrefix' | 'createdAt'> & {
   id: number
   name: string

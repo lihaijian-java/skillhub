@@ -27,6 +27,8 @@ import type {
   ReportDisposition,
   AuthMethod,
   OAuthProvider,
+  WeComAuthorizeUrlResponse,
+  WeComLoginConfig,
   User,
   ManagedNamespace,
   Namespace,
@@ -408,6 +410,24 @@ export const authApi = {
         username: request.username,
         password: request.password,
       }),
+    })
+  },
+
+  async getWeComConfig(): Promise<WeComLoginConfig> {
+    return fetchJson<WeComLoginConfig>('/api/v1/auth/wecom/config')
+  },
+
+  async getWeComAuthorizeUrl(state: string): Promise<WeComAuthorizeUrlResponse> {
+    return fetchJson<WeComAuthorizeUrlResponse>(`/api/v1/auth/wecom/authorize-url?state=${encodeURIComponent(state)}`)
+  },
+
+  async weComLogin(code: string): Promise<User> {
+    return fetchJson<User>('/api/v1/auth/wecom/login', {
+      method: 'POST',
+      headers: await ensureCsrfHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: JSON.stringify({ code }),
     })
   },
 }
