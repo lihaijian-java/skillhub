@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next'
 import { SearchBar } from '@/features/search/search-bar'
 import { SkillCard } from '@/features/skill/skill-card'
 import { SkeletonList } from '@/shared/components/skeleton-loader'
-import { QuickStartSection } from '@/shared/components/quick-start'
 import { useSearchSkills } from '@/shared/hooks/use-skill-queries'
 import { normalizeSearchQuery } from '@/shared/lib/search-query'
 import { Button } from '@/shared/ui/button'
@@ -130,9 +129,6 @@ export function HomePage() {
           </div>
         )}
       </section>
-
-      {/* Quick Start Section */}
-      <QuickStartSection ns="home" />
     </div>
   )
 }

@@ -45,7 +45,7 @@ function buildLoginSearch(returnTo: string) {
 }
 
 export function WeComLoginEntry({ returnTo }: WeComLoginEntryProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const search = useSearch({ from: '/login' })
   const queryClient = useQueryClient()
@@ -55,6 +55,9 @@ export function WeComLoginEntry({ returnTo }: WeComLoginEntryProps) {
   const [panelVisible, setPanelVisible] = useState(false)
   const [fallbacking, setFallbacking] = useState(false)
   const [processingCallback, setProcessingCallback] = useState(false)
+  const isChinese = i18n.resolvedLanguage?.split('-')[0] === 'zh'
+  const weComProviderName = isChinese ? '企业微信' : 'WeCom'
+  const weComLoginLabel = t('loginButton.loginWith', { name: weComProviderName })
 
   const { data: config } = useQuery({
     queryKey: ['auth', 'wecom', 'config'],
@@ -218,7 +221,10 @@ export function WeComLoginEntry({ returnTo }: WeComLoginEntryProps) {
   }, [])
 
   useEffect(() => () => {
-    clearPanel()
+    if (quickAuthTimerRef.current !== null) {
+      window.clearTimeout(quickAuthTimerRef.current)
+    }
+    panelRef.current?.unmount()
   }, [])
 
   if (!config && !search.code && !search.auth_code) {
@@ -237,11 +243,19 @@ export function WeComLoginEntry({ returnTo }: WeComLoginEntryProps) {
     <div className="space-y-3">
       <Button
         type="button"
-        className="w-full h-12 text-base bg-[#07c160] text-white hover:bg-[#06ad56]"
+        variant="outline"
+        className="w-full h-12 text-base"
         disabled={!config || fallbacking || loginMutation.isPending}
         onClick={handleWeComLogin}
       >
-        {panelVisible ? t('login.wecomRetry') : t('login.wecomLogin')}
+        <span className="relative mr-3 h-5 w-5 shrink-0 overflow-hidden rounded-full" aria-hidden="true">
+          <img
+            src="/wecom-logo.svg"
+            alt=""
+            className="h-5 w-5"
+          />
+        </span>
+        {isChinese ? weComLoginLabel.replace(/\s+/g, '') : weComLoginLabel}
       </Button>
       {panelVisible ? (
         <div className="rounded-xl border border-border bg-muted/30 p-3">
@@ -252,10 +266,6 @@ export function WeComLoginEntry({ returnTo }: WeComLoginEntryProps) {
       {fallbacking ? (
         <p className="text-center text-xs text-muted-foreground">{t('login.wecomFallbacking')}</p>
       ) : null}
-      <div className="relative py-1 text-center text-xs text-muted-foreground">
-        <span className="relative z-10 bg-card px-3">{t('login.or')}</span>
-        <div className="absolute left-0 right-0 top-1/2 h-px bg-border" />
-      </div>
     </div>
   )
 }

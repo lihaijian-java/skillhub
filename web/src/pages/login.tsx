@@ -88,7 +88,6 @@ export function LoginPage() {
               methodDisplayName={bootstrapMethod?.displayName}
               onAuthenticated={() => navigate({ to: returnTo })}
             />
-            <WeComLoginEntry returnTo={returnTo} />
 
             <Tabs defaultValue="password" className="space-y-6">
               <TabsList className="grid w-full grid-cols-2">
@@ -185,6 +184,7 @@ export function LoginPage() {
                 <p className="text-sm text-muted-foreground">
                   {t('login.oauthHint')}
                 </p>
+                <WeComLoginEntry returnTo={returnTo} />
                 <LoginButton returnTo={returnTo} />
               </TabsContent>
             </Tabs>

@@ -12,11 +12,13 @@ interface LoginButtonProps {
 function OAuthIcon({ provider }: { provider: string }) {
   const normalizedProvider = provider.toLowerCase()
   return (
-    <img
-      src={`/${normalizedProvider}-logo.svg`}
-      alt={provider}
-      className="w-5 h-5 mr-3"
-    />
+    <span className="mr-3 flex h-5 w-5 shrink-0 items-center justify-center overflow-hidden rounded-full" aria-hidden="true">
+      <img
+        src={`/${normalizedProvider}-logo.svg`}
+        alt=""
+        className="h-5 w-5 object-contain"
+      />
+    </span>
   )
 }
 
@@ -24,10 +26,15 @@ function OAuthIcon({ provider }: { provider: string }) {
  * Renders OAuth login buttons from the auth-method catalog returned by the backend.
  */
 export function LoginButton({ returnTo }: LoginButtonProps) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { data, isLoading } = useAuthMethods(returnTo)
 
   const providers = (data ?? []).filter((method) => method.methodType === 'OAUTH_REDIRECT')
+  const isChinese = i18n.resolvedLanguage?.split('-')[0] === 'zh'
+  const formatLoginLabel = (name: string) => {
+    const label = t('loginButton.loginWith', { name })
+    return isChinese ? label.replace(/\s+/g, '') : label
+  }
 
   if (isLoading) {
     return (
@@ -52,10 +59,9 @@ export function LoginButton({ returnTo }: LoginButtonProps) {
           }}
         >
           <OAuthIcon provider={provider.provider} />
-          {t('loginButton.loginWith', { name: provider.displayName })}
+          {formatLoginLabel(provider.displayName)}
         </Button>
       ))}
     </div>
   )
 }
-
